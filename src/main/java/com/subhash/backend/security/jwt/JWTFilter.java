@@ -25,26 +25,26 @@ public class JWTFilter extends OncePerRequestFilter {
     MyUserDetailsService myUserDetailsService;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
 
         try {
-            String jwt=jwtUtils.getJwtFromHeader(request);
+            String jwt = jwtUtils.getJwtFromHeader(request);
 
-            if(jwt != null && jwtUtils.validateToken(jwt)){
-                String userName=jwtUtils.getUserNamefromJwtToken(jwt);
-                UserDetails userDetails=myUserDetailsService.loadUserByUsername(userName);
+            if (jwt != null && jwtUtils.validateToken(jwt)) {
+                String userName = jwtUtils.getUserNamefromJwtToken(jwt);
+                UserDetails userDetails = myUserDetailsService.loadUserByUsername(userName);
 
-                UsernamePasswordAuthenticationToken authentication=new
-                        UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                        userDetails, null, userDetails.getAuthorities());
 
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e);
         }
-        filterChain.doFilter(request,response);
+        filterChain.doFilter(request, response);
     }
 }
-
