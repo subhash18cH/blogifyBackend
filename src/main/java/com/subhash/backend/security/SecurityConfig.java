@@ -4,6 +4,7 @@ import com.subhash.backend.Oauth2.OAuth2LoginSuccessHandler;
 import com.subhash.backend.security.jwt.JWTFilter;
 import com.subhash.backend.security.service.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
@@ -38,6 +39,9 @@ public class SecurityConfig {
     @Autowired
     private JWTFilter jwtFilter;
 
+    @Value("${frontend.url}")
+    private String frontendUrl;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http)throws Exception{
         return http
@@ -58,7 +62,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource(){
 
         CorsConfiguration configuration=new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173"));
+        configuration.setAllowedOrigins(Arrays.asList(frontendUrl));
         configuration.addAllowedHeader("*");
         configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE","OPTIONS"));
         configuration.setMaxAge(3600L);
