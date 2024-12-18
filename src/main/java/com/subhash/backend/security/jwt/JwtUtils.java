@@ -18,27 +18,17 @@ import java.util.Date;
 @Component
 public class JwtUtils {
 
-    private String jwtSecret=getSecret();
+    private String jwtSecret;
 
-    public String getSecret(){
+    public JwtUtils() {
         try {
             KeyGenerator keyGenerator = KeyGenerator.getInstance("HmacSHA256");
             SecretKey secretKey = keyGenerator.generateKey();
-            return Base64.getEncoder().encodeToString(secretKey.getEncoded());
+            jwtSecret = Base64.getEncoder().encodeToString(secretKey.getEncoded());
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
     }
-
-//    public JwtUtils() {
-//        try {
-//            KeyGenerator keyGenerator = KeyGenerator.getInstance("HmacSHA256");
-//            SecretKey secretKey = keyGenerator.generateKey();
-//            jwtSecret = Base64.getEncoder().encodeToString(secretKey.getEncoded());
-//        } catch (NoSuchAlgorithmException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
 
     @Value("${spring.app.jwtExpirationMs}")
     private int jwtExpiration;
